@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Adventures</title>
+
+    <link href="style.css" rel="stylesheet"/>
+</head>
+
+<body>
+<div id="Adv">
+    <section class="app">
+        <header class="header">
+            <h1>Adventures</h1>
+
+            <input class="new-adv"
+                   autofocus autocomplete="off"
+                   placeholder="Type of sport"
+                   v-model="typeOfSport">
+            <input class="new-adv"
+                   autofocus autocomplete="off"
+                   placeholder="Period of time"
+                   v-model="period">
+
+
+            <div class="col" v-if="adv.length > 0" >
+                <button type="submit" @on-click="search()" class="btn btnType1">Search</button> <br/>
+            </div>
+
+        </header>
+    </section>
+
+
+    <section class="app">
+        <header>
+            <h5>Look what we found</h5>
+
+            <div>
+                <ul id="typeOfSport">
+                </ul>
+            </div>
+
+        </header>
+    </section>
+
+</div>
+
+
+    <script src="https://unpkg.com/vue@2.5.8/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.17.1/dist/axios.min.js"></script>
+    <script src="vue.js"></script>
+
+<script>
+    var typeOfSport = {
+        ATV: {
+            tara: 'Ro'
+        },
+        Parapanta: {
+            tara: "It"
+        }
+    }
+
+    function search() {
+        for(var prop in typeOfSport) {
+            document.getElementById('typeOfSport').innerHTML += '<li>' + prop + '</li>';
+
+    }
+
+
+    }
+
+</script>
+
+</body>
+</html>
