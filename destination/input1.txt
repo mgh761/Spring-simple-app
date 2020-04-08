@@ -1,0 +1,8 @@
+Transformed:
+
+Tara: Romania
+Regiune: Brasovului
+Localitate: Sinaia
+TipSport: hiking
+Cost: 50
+Perioada: Aprilie-Mai

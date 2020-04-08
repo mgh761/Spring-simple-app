@@ -1,0 +1,8 @@
+Transformed:
+
+Tara: Romania
+Regiune: -
+Localitate: Constanta
+TipSport: Scuba Diving
+Cost: 300
+Perioada: Iulie-August

@@ -4,20 +4,24 @@ new Vue({
     data: {
         period: '',
         typeOfSport: '',
-        showAllAdventures: false,
-        advs: [
-            "aadsf",
-            "sadf"
-        ]
+        adv: '',
+        advs: []
 
     },
     methods: {
+
         search: function () {
-            return this.typeOfSpotrs.push({name: this.typeOfSprt})
+            window.location.href = 'http://localhost:9090/api/vl/bonus/?sport=ATV';
+            var thisObj = this;
+            axios.get()
+                .then(function (response) {
+                    console.log("success");
+                    thisObj.advs = response.data;
+                })
+
 
         },
 
-        // pare ca functioneaza, dar n are css si html
         getAllAdventures: function () {
             var vm = this;
             axios({
@@ -31,9 +35,17 @@ new Vue({
 
         },
 
-        search: function () {
-
-
+        addAdventure: function () {
+            idType = document.getElementById("idType").value;
+            idTime = document.getElementById("idTime").value;
+            axios({
+                method: 'post',
+                url: 'http://localhost:9090/api/v1/adventures/add',
+                data: {
+                    typeOfSport: idType,
+                    time: idTime
+                }
+            });
         }
     },
     mounted: function(){

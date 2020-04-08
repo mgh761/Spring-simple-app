@@ -8,6 +8,9 @@
     <title>Adventures</title>
 
     <link href="style.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/vue@2.5.8/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.17.1/dist/axios.min.js"></script>
+    <script src="vue.js"></script>
 </head>
 
 <body>
@@ -17,17 +20,18 @@
             <h1>Adventures</h1>
 
             <input class="new-adv"
-                   autofocus autocomplete="off"
-                   placeholder="Type of sport"
-                   v-model="typeOfSport">
+                   type="text"
+                   name="typeOfSport"
+                   id="ifType"
+                   placeholder="Type of sport">
             <input class="new-adv"
-                   autofocus autocomplete="off"
-                   placeholder="Period of time"
-                   v-model="period">
-
+                   type="text"
+                   name="time"
+                   id="ifTime"
+                   placeholder="Period of time">
 
             <div class="col" v-if="adv.length > 0" >
-                <button type="submit" @on-click="search()" class="btn btnType1">Search</button> <br/>
+                <button type="submit" onclick="addAdventure()" class="btn btnType1">Add</button> <br/>
             </div>
 
         </header>
@@ -37,9 +41,11 @@
     <section class="app">
         <header>
             <h5>Look what we found</h5>
+            <button type="submit" onclick="getAllAdventures()" class="btn btnType1">Search</button> <br/>
 
             <div>
-                <ul id="typeOfSport">
+                <ul th:each="adv : ${advs}">
+                    <li th:text="${advs}"></li>
                 </ul>
             </div>
 
@@ -49,30 +55,7 @@
 </div>
 
 
-    <script src="https://unpkg.com/vue@2.5.8/dist/vue.js"></script>
-    <script src="https://unpkg.com/axios@0.17.1/dist/axios.min.js"></script>
-    <script src="vue.js"></script>
 
-<script>
-    var typeOfSport = {
-        ATV: {
-            tara: 'Ro'
-        },
-        Parapanta: {
-            tara: "It"
-        }
-    }
-
-    function search() {
-        for(var prop in typeOfSport) {
-            document.getElementById('typeOfSport').innerHTML += '<li>' + prop + '</li>';
-
-    }
-
-
-    }
-
-</script>
 
 </body>
 </html>
