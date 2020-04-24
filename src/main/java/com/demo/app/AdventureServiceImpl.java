@@ -1,4 +1,4 @@
-package com.demo;
+package com.demo.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,19 +12,21 @@ public class AdventureServiceImpl implements AdventureService {
     AdventureRepo adventureRepo;
 
     @Override
+    public boolean existById(Long id) {
+        return adventureRepo.existsById(id);
+    }
+
+    @Override
     public Adventure findAdventureById(Long id) {
         return adventureRepo.findById(id).get();
     }
 
     @Override
-    public List<Adventure> findAll() {
-
-        return (List<Adventure>) adventureRepo.findAll();
-    }
+    public List<Adventure> findAll() { return (List<Adventure>) adventureRepo.findAll(); }
 
     @Override
-    public Adventure saveAdventure(Adventure adventure) {
-        return adventureRepo.save(adventure);
+    public void saveAdventure(Adventure adventure) {
+         adventureRepo.save(adventure);
     }
 
     @Override

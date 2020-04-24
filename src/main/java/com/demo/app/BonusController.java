@@ -1,4 +1,5 @@
-package com.demo;
+
+package com.demo.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,9 +24,9 @@ public class BonusController {
         List<Adventure> allOpstions = adventureService.findAll();
         List<Adventure> bestOptions = new ArrayList<>();
 
-        for(int i = 0; i < allOpstions.size(); i ++) {
-            if(allOpstions.get(i).getTipSport().equals(tipSport)) {
-                    bestOptions.add(allOpstions.get(i));
+        for (Adventure allOpstion : allOpstions) {
+            if (allOpstion.getTipSport().equals(tipSport)) {
+                bestOptions.add(allOpstion);
             }
         }
 
@@ -35,3 +36,4 @@ public class BonusController {
             return bestOptions;
     }
 }
+

@@ -1,4 +1,4 @@
-package com.demo;
+package com.demo.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +11,7 @@ public class BootStrapData implements CommandLineRunner {
     AdventureRepo adventureRepo;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         System.out.println("Load Adventures data.");
 

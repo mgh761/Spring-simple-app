@@ -10,10 +10,12 @@
     <link href="style.css" rel="stylesheet"/>
     <script src="https://unpkg.com/vue@2.5.8/dist/vue.js"></script>
     <script src="https://unpkg.com/axios@0.17.1/dist/axios.min.js"></script>
-    <script src="vue.js"></script>
+    <script href="../vue.js"></script>
+    <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
+
 <div id="Adv">
     <section class="app">
         <header class="header">
@@ -44,8 +46,8 @@
             <button type="submit" onclick="getAllAdventures()" class="btn btnType1">Search</button> <br/>
 
             <div>
-                <ul th:each="adv : ${advs}">
-                    <li th:text="${advs}"></li>
+                <ul th:each="adventure : ${adventures}">
+                    <li th:text="${adventures}"></li>
                 </ul>
             </div>
 
@@ -56,6 +58,62 @@
 
 
 
+<script>
 
+    new Vue({
+        el: '#app',
+        data: {
+            period: '',
+            typeOfSport: '',
+            adv: '',
+            advs: []
+
+        },
+        methods: {
+
+            search: function () {
+                window.location.href = 'http://localhost:9090/api/vl/bonus/?sport=ATV';
+                var thisObj = this;
+                axios.get()
+                    .then(function (response) {
+                        console.log("success");
+                        thisObj.advs = response.data;
+                    })
+
+
+            },
+
+            getAllAdventures: function () {
+                var vm = this;
+                axios({
+                    url:'http://localhost:9090/api/vl/adventures/all',
+                    method: 'get'
+                }).then(function (response) {
+                    vm.adv = response.adv;
+                    console.log(response);
+
+                })
+
+            },
+
+            addAdventure: function () {
+                idType = document.getElementById("idType").value;
+                idTime = document.getElementById("idTime").value;
+                axios({
+                    method: 'post',
+                    url: 'http://localhost:9090/api/v1/adventures/add',
+                    data: {
+                        typeOfSport: idType,
+                        time: idTime
+                    }
+                });
+            }
+        },
+        mounted: function(){
+            this.getAllAdventures();
+        }
+
+    })
+</script>
 </body>
 </html>

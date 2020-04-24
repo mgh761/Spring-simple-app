@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <style>
+
+        body {
+            font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.4em;
+            background: linear-gradient(-45deg, #d4d2d2, #ebe6e6, #f5f2f2, #f5f5f5);
+            color: #4d4d4d;
+            min-width: 230px;
+            max-width: 550px;
+            margin: 0 auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-weight: 300;
+        }
+
+        a {
+            color: rgba(175, 47, 47, 0.15);
+            text-decoration: none
+        }
+
+        a:hover {
+            color: rgba(175, 47, 47, 0.15);
+            text-decoration: underline
+        }
+
+        h2 {
+            top: -15px;
+            line-height: 30px;
+            position: absolute;
+            font-size: 30px;
+            text-align: center;
+            color: #d9a9a9;
+        }
+
+        h5 {
+            text-align: center;
+            color: #4d4d4d;
+        }
+
+        p {
+            margin-bottom: 1.75rem
+        }
+
+        hr {
+            margin-top: 1.125rem;
+            margin-bottom: 1.125rem;
+            border-top: 1px solid rgba(175, 47, 47, 0.15);
+        }
+
+        .table {
+            background-color: transparent;
+            text-align: center;
+        }
+
+        .table td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 20px;
+        }
+
+        .table th {
+            color: #ffffff;
+            background: #d9a9a9;
+        }
+        .btn {
+            padding: 10px;
+            font-size: 15px;
+            background: transparent;
+            border: 1px solid #3D4048;
+            border-radius: 12px;
+            text-transform: uppercase;
+            overflow: hidden;
+            display: block;
+            margin: 0 auto;
+            cursor: pointer;
+            width: 100px;
+            -webkit-transition-duration: 0.4s;
+            transition-duration: 0.4s;
+        }
+
+        .btnType1 {
+            background-color: transparent;
+            color:#3D4048;
+            border: 2px solid rgba(175, 47, 47, 0.15);
+        }
+
+        .btnType1:hover {
+            background-color: rgba(175, 47, 47, 0.15);
+            color:#3D4048;
+            box-shadow: 0 5px #3D4048;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:switch="${adventures}" class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 th:case="null">No element yet!</h2><br><br><br><br><br><br>
+            <div th:case="*">
+                <h2 class="my-5">Look what we found</h2>
+                <table class="table table-striped table-responsive-md">
+                    <thead>
+                    <tr>
+                        <th>Tara</th>
+                        <th>Regiune</th>
+                        <th>Localitate</th>
+                        <th>Tip Sport</th>
+                        <th>Cost</th>
+                        <th>Perioada</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="adventure : ${adventures}">
+                        <td th:text="${adventure.tara}"></td>
+                        <td th:text="${adventure.regiune}"></td>
+                        <td th:text="${adventure.localitate}"></td>
+                        <td th:text="${adventure.tipSport}"></td>
+                        <td th:text="${adventure.cost}"></td>
+                        <td th:text="${adventure.perioada}"></td>
+                        <td><a th:href="@{/edit/{id}(id=${adventure.id})}" class="btn btnType1"><i class="fas fa-user-edit ml-2"></i></a></td>
+                        <td><a th:href="@{/delete/{id}(id=${adventure.id})}" class="btn btnType1"><i class="fas fa-user-times ml-2"></i></a></td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <p class="my-5">
+                <a href="/api/vl/adventures/add" class="btn btnType1"><i class="fas fa-user-plus ml-2"></i></a>
+                <h5>Delete all</h5>
+                <a href="/api/vl/adventures/delete/all" class="btn btnType1"><i class="fas fa-user-times ml-2"></i></a>
+
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
