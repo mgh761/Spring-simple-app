@@ -1,119 +1,239 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Adventures</title>
-
-    <link href="style.css" rel="stylesheet"/>
-    <script src="https://unpkg.com/vue@2.5.8/dist/vue.js"></script>
-    <script src="https://unpkg.com/axios@0.17.1/dist/axios.min.js"></script>
-    <script href="../vue.js"></script>
-    <link rel="stylesheet" href="../style.css">
-</head>
-
-<body>
-
-<div id="Adv">
-    <section class="app">
-        <header class="header">
-            <h1>Adventures</h1>
-
-            <input class="new-adv"
-                   type="text"
-                   name="typeOfSport"
-                   id="ifType"
-                   placeholder="Type of sport">
-            <input class="new-adv"
-                   type="text"
-                   name="time"
-                   id="ifTime"
-                   placeholder="Period of time">
-
-            <div class="col" v-if="adv.length > 0" >
-                <button type="submit" onclick="addAdventure()" class="btn btnType1">Add</button> <br/>
-            </div>
-
-        </header>
-    </section>
-
-
-    <section class="app">
-        <header>
-            <h5>Look what we found</h5>
-            <button type="submit" onclick="getAllAdventures()" class="btn btnType1">Search</button> <br/>
-
-            <div>
-                <ul th:each="adventure : ${adventures}">
-                    <li th:text="${adventures}"></li>
-                </ul>
-            </div>
-
-        </header>
-    </section>
-
-</div>
-
-
-
-<script>
-
-    new Vue({
-        el: '#app',
-        data: {
-            period: '',
-            typeOfSport: '',
-            adv: '',
-            advs: []
-
-        },
-        methods: {
-
-            search: function () {
-                window.location.href = 'http://localhost:9090/api/vl/bonus/?sport=ATV';
-                var thisObj = this;
-                axios.get()
-                    .then(function (response) {
-                        console.log("success");
-                        thisObj.advs = response.data;
-                    })
-
-
-            },
-
-            getAllAdventures: function () {
-                var vm = this;
-                axios({
-                    url:'http://localhost:9090/api/vl/adventures/all',
-                    method: 'get'
-                }).then(function (response) {
-                    vm.adv = response.adv;
-                    console.log(response);
-
-                })
-
-            },
-
-            addAdventure: function () {
-                idType = document.getElementById("idType").value;
-                idTime = document.getElementById("idTime").value;
-                axios({
-                    method: 'post',
-                    url: 'http://localhost:9090/api/v1/adventures/add',
-                    data: {
-                        typeOfSport: idType,
-                        time: idTime
-                    }
-                });
-            }
-        },
-        mounted: function(){
-            this.getAllAdventures();
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Helvetica Neue, Arial, sans-serif;
+            font-size: 14px;
+            background: linear-gradient(-45deg, #d4d2d2, #ebe6e6, #f5f2f2, #f5f5f5);
+            color: #4d4d4d;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-    })
+        table {
+            border: 2px solid #d9a9a9;
+            border-radius: 3px;
+            background-color: transparent;
+            text-align: center;
+        }
+
+        th {
+            color: #ffffff;
+            background: #d9a9a9;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 20px;
+        }
+
+        th,
+        td {
+            min-width: 120px;
+            padding: 10px 20px;
+        }
+
+        th.active {
+            color: #ffffff;
+        }
+
+        th.active .arrow {
+            opacity: 1;
+        }
+
+        .arrow {
+            display: inline-block;
+            vertical-align: middle;
+            width: 0;
+            height: 0;
+            margin-left: 5px;
+            opacity: 0.66;
+        }
+
+        .arrow.asc {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 4px solid #fff;
+        }
+
+        .arrow.dsc {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #fff;
+        }
+        .ball {
+            position: absolute;
+            border-radius: 100%;
+            opacity: 0.7;
+        }
+    </style>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+
+    <!-- component template -->
+    <script type="text/x-template" id="grid-template">
+        <table>
+            <thead>
+            <tr>
+                <th v-for="key in columns"
+                    @click="sortBy(key)"
+                    :class="{ active: sortKey == key }">
+                    {{ key | capitalize }}
+                    <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+              </span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="entry in filteredAdventures">
+                <td v-for="key in columns">
+                    {{entry[key]}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </script>
+</head>
+<body>
+<!-- demo root element -->
+<div id="demo">
+    <form id="search">
+        Search <input name="query" v-model="searchQuery" />
+    </form><br>
+    <demo-grid
+            :adventures="gridData"
+            :columns="gridColumns"
+            :filter-key="searchQuery"
+    >
+    </demo-grid>
+</div>
+
+<script>
+    // register the grid component
+    Vue.component("demo-grid", {
+        template: "#grid-template",
+        props: {
+            adventures: Array,
+            columns: Array,
+            filterKey: String
+        },
+        data: function() {
+            var sortOrders = {};
+            this.columns.forEach(function(key) {
+                sortOrders[key] = 1;
+            });
+            return {
+                sortKey: "",
+                sortOrders: sortOrders
+            };
+        },
+        computed: {
+            filteredAdventures: function() {
+                var sortKey = this.sortKey;
+                var filterKey = this.filterKey && this.filterKey.toLowerCase();
+                var order = this.sortOrders[sortKey] || 1;
+                var adventures = this.adventures;
+                if (filterKey) {
+                    adventures = adventures.filter(function(row) {
+                        return Object.keys(row).some(function(key) {
+                            return (
+                                String(row[key])
+                                    .toLowerCase()
+                                    .indexOf(filterKey) > -1
+                            );
+                        });
+                    });
+                }
+                if (sortKey) {
+                    adventures = adventures.slice().sort(function(a, b) {
+                        a = a[sortKey];
+                        b = b[sortKey];
+                        return (a === b ? 0 : a > b ? 1 : -1) * order;
+                    });
+                }
+                return adventures;
+            }
+        },
+        filters: {
+            capitalize: function(str) {
+                if (!str) return ''
+                str = str.toString()
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+        },
+        methods: {
+            sortBy: function(key) {
+                this.sortKey = key;
+                this.sortOrders[key] = this.sortOrders[key] * -1;
+            }
+        }
+    });
+
+    // bootstrap the demo
+    var demo = new Vue({
+        el: "#demo",
+        data: {
+            searchQuery: "",
+            gridColumns: ["tara", "regiune", "localitate", "tipSport", "cost", "perioada"],
+            gridData: [
+                { tara: "Romania", regiune: "Brasovului", localitate: "Sinaia",
+                    tipSport: "ATV", cost: 50, perioada: "Aprilie-Mai"},
+                { tara: "Romania", regiune: "Brasovului", localitate: "Bunloc",
+                    tipSport: "Parapanta", cost: 200, perioada: "Tot anul"}
+            ]
+        }
+    });
+</script>
+<script>
+    // Some random colors
+    const colors = ["#3CC157", "#2AA7FF", "#1B1B1B", "#FCBC0F", "#F85F36"];
+
+    const numBalls = 50;
+    const balls = [];
+
+    for (let i = 0; i < numBalls; i++) {
+        let ball = document.createElement("div");
+        ball.classList.add("ball");
+        ball.style.background = colors[Math.floor(Math.random() * colors.length)];
+        ball.style.left = `${Math.floor(Math.random() * 100)}vw`;
+        ball.style.top = `${Math.floor(Math.random() * 100)}vh`;
+        ball.style.transform = `scale(${Math.random()})`;
+        ball.style.width = `${Math.random()}em`;
+        ball.style.height = ball.style.width;
+
+        balls.push(ball);
+        document.body.append(ball);
+    }
+
+    // Keyframes
+    balls.forEach((el, i, ra) => {
+        let to = {
+            x: Math.random() * (i % 2 === 0 ? -11 : 11),
+            y: Math.random() * 12
+        };
+
+        let anim = el.animate(
+            [
+                { transform: "translate(0, 0)" },
+                { transform: `translate(${to.x}rem, ${to.y}rem)` }
+            ],
+            {
+                duration: (Math.random() + 1) * 2000, // random duration
+                direction: "alternate",
+                fill: "both",
+                iterations: Infinity,
+                easing: "ease-in-out"
+            }
+        );
+    });
+
 </script>
 </body>
 </html>
